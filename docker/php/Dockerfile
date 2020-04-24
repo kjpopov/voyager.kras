@@ -1,10 +1,14 @@
-FROM php:7.3-fpm-alpine AS base
+FROM php:7.4-fpm-alpine AS base
 
 # Install dependencies
-RUN apk --no-cache add bash mysql-client curl libzip-dev zip zlib-dev redis nodejs npm build-base gcc autoconf
-
-# Install extensions
-RUN docker-php-ext-install pdo_mysql zip
+RUN apk add --no-cache freetype \
+    bash mysql-client curl \
+    libzip-dev zip zlib-dev \
+    redis nodejs npm build-base gcc autoconf \
+    libpng libjpeg-turbo freetype-dev libpng-dev libjpeg-turbo-dev && \
+    docker-php-ext-configure gd --with-freetype --with-jpeg && \
+    docker-php-ext-install -j$(nproc) pdo_mysql zip exif gd && \
+    apk del --no-cache freetype-dev libpng-dev libjpeg-turbo-dev
 
 # Install redis native ext
 RUN pecl install -o -f redis igbinary \
