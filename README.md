@@ -1,2 +1,2 @@
 # voyager.kras
-A voyager/laravel web academy repo
+A voyager/laravel web academy

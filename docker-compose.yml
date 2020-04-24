@@ -1,0 +1,66 @@
+version: "3.5"
+services:
+
+##### CLOUD NETWORK SERVICES
+  # redis:
+  #   image: redis:4.0.5-alpine
+  #   command: ["redis-server", "--appendonly", "yes"]
+  #   hostname: redis
+  #   networks:
+  #     - cloud
+  #   ports:
+  #     - 6379:6379
+  mysql:
+    image: mysql:5.7
+    environment:
+      - MYSQL_DATABASE=voyager
+      - MYSQL_USER=voyager-user
+      - MYSQL_PASSWORD=voyager-password
+      - MYSQL_ROOT_PASSWORD=docker
+    ports:
+      - 33306:3306
+    networks:
+      - local
+  laravel:
+    build:
+      context: docker/php
+      target: base
+    volumes:
+      - "./laravel:/app"
+    working_dir: /app
+##### Uncomment the following command: section to initialize fresh project
+    # command: ["bash", "-c", "
+    #   composer global require laravel/installer &&
+    #   composer create-project --prefer-dist laravel/laravel . &&
+    #   composer require tcg/voyager &&
+    #   composer install --no-interaction &&
+    #   php artisan key:generate
+    #   "]
+    command: ["bash", "-c", "
+      composer install --no-interaction &&
+      php artisan serve --host=0.0.0.0 --port=8000
+      "]
+    ports:
+      - 80:8000
+    networks:
+      - local
+    environment:
+      - APP_URL=http://voyager.kras
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=voyager
+      - DB_USERNAME=voyager-user
+      - DB_PASSWORD=voyager-password
+      - BROADCAST_DRIVER=log
+      - CACHE_DRIVER=file
+      - QUEUE_CONNECTION=redis
+      - SESSION_DRIVER=file
+      - SESSION_LIFETIME=120
+      # - REDIS_HOST=redis
+      # - REDIS_PASSWORD=null
+      # - REDIS_PORT=6379
+
+networks:
+  local:
+    driver: bridge
