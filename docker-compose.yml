@@ -26,7 +26,8 @@ services:
       context: docker/php
       target: base
     volumes:
-      - "./laravel:/app"
+      - ./docker/php/php.ini:/usr/local/etc/php/php.ini:ro
+      - ./laravel:/app:cached
     working_dir: /app
 ##### Uncomment the following command: section to initialize fresh project
     # command: ["bash", "-c", "
@@ -45,6 +46,7 @@ services:
     networks:
       - local
     environment:
+      - TIMEZONE=Europe/Berlin
       - APP_URL=http://voyager.kras
       # - APP_ENV=production
       # - APP_DEBUG=false

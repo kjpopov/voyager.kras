@@ -3,11 +3,13 @@ FROM php:7.4-fpm-alpine AS base
 # Install dependencies
 RUN apk add --no-cache freetype \
     bash mysql-client curl \
+    icu-dev \
     libzip-dev zip zlib-dev \
     redis nodejs npm build-base gcc autoconf \
     libpng libjpeg-turbo freetype-dev libpng-dev libjpeg-turbo-dev && \
     docker-php-ext-configure gd --with-freetype --with-jpeg && \
-    docker-php-ext-install -j$(nproc) pdo_mysql zip exif gd && \
+    docker-php-ext-install -j$(nproc) \
+    opcache intl pdo_mysql zip exif gd && \
     apk del --no-cache freetype-dev libpng-dev libjpeg-turbo-dev
 
 # Install redis native ext
