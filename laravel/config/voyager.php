@@ -85,6 +85,8 @@ return [
         'autoload_migrations' => true,
     ],
 
+    'prefix' => 'backend',
+
     /*
     |--------------------------------------------------------------------------
     | Multilingual configuration
@@ -99,7 +101,7 @@ return [
         /*
          * Set whether or not the multilingual is supported by the BREAD input.
          */
-        'enabled' => false,
+        'enabled' => true,
 
         /*
          * Select default language
@@ -111,6 +113,7 @@ return [
          */
         'locales' => [
             'en',
+            'bg',
             //'pt',
         ],
     ],
@@ -206,7 +209,7 @@ return [
     ],
 
     // Activate compass when environment is NOT local
-    'compass_in_production' => false,
+    'compass_in_production' => true,
 
     'media' => [
         // The allowed mimetypes to be uploaded through the media-manager.
